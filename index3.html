@@ -1,0 +1,55 @@
+const player = document.querySelector(".player");
+const bullet = document.querySelector(".bullet");
+
+let posX = window.innerWidth / 2;
+let recoil = 0;
+
+// движение игрока
+document.addEventListener("mousemove", (e) => {
+  posX = e.clientX;
+  player.style.left = posX + "px";
+});
+
+// стрельба
+document.addEventListener("click", () => {
+  shoot();
+});
+
+function shoot() {
+  // показать пулю
+  bullet.style.opacity = 1;
+
+  let y = window.innerHeight - 100;
+
+  recoil = 10;
+
+  function animateBullet() {
+    y -= 15;
+
+    bullet.style.bottom = y + "px";
+    bullet.style.left = posX + "px";
+
+    if (y > 0) {
+      requestAnimationFrame(animateBullet);
+    } else {
+      bullet.style.opacity = 0;
+      bullet.style.bottom = "90px";
+    }
+  }
+
+  animateBullet();
+}
+
+// отдача (эффект)
+function recoilEffect() {
+  if (recoil > 0) {
+    player.style.transform = `translateX(-50%) translateY(-${recoil}px)`;
+    recoil -= 0.5;
+  } else {
+    player.style.transform = `translateX(-50%)`;
+  }
+
+  requestAnimationFrame(recoilEffect);
+}
+
+recoilEffect();
